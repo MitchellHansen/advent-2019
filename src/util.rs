@@ -42,10 +42,12 @@ fn get_body(problem: i32) -> String {
     }
 }
 
+
+
 fn parse_body(body: String) -> Vec<i32> {
 
     let a : Vec<i32> = body.
-        split("\n")
+        split(",")
         .filter_map(|s| {
             //map(|s| {
 
