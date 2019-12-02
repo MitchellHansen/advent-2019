@@ -42,26 +42,6 @@ fn get_body(problem: i32) -> String {
     }
 }
 
-
-
-fn parse_body(body: String) -> Vec<i32> {
-
-    let a : Vec<i32> = body.
-        split(",")
-        .filter_map(|s| {
-            //map(|s| {
-
-            let s = s.trim();
-            if !s.is_empty() {
-                Some(s.parse::<i32>().unwrap())
-            } else {
-                None
-            }
-        }).collect();
-
-    a
-}
-
-pub fn get_problem(problem: i32) -> Vec<i32> {
-    parse_body(get_body(problem))
+pub fn get_problem(problem: i32) -> String {
+    get_body(problem)
 }

@@ -1,25 +1,32 @@
 extern crate reqwest;
 extern crate tempfile;
 
+use crate::problem1::part1::Problem1;
+use crate::problem2::part1::Problem2;
+
 mod problem1;
 mod problem2;
 mod util;
 
-// struct to represent commands, opcodes
-// 1 add togerther two numbers and stores a third
-// 2 multiplies using the same deal (op, in, in, out)
+pub trait Problem {
+    // Parses input and generates state
+    fn new(input: &String) -> Self;
 
-
+    // Runs on state
+    fn run_part1(&self);
+    fn run_part2(&self);
+}
 
 fn main() {
 
-  //  let problem1_data = util::get_problem(1);
+    let problem1 = Problem1::new(&util::get_problem(1));
 
-    //problem1::part1::run(&problem1_data);
-    //problem1::part2::run(&problem1_data);
+    problem1.run_part1();
+    problem1.run_part2();
 
-    let problem2_data = util::get_problem(2);
+    let problem2 = Problem2::new(&util::get_problem(2));
 
-    problem2::part2::run(&problem2_data);
+    problem2.run_part1();
+    problem2.run_part2();
 
 }
