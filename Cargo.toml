@@ -1,0 +1,12 @@
+[package]
+name = "advent-2019"
+version = "0.1.0"
+authors = ["mitchellhansen <mitchellhansen0@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+reqwest = "0.9.22"
+tempfile = "3.1.0"
+futures = "0.3.1"
