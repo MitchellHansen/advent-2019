@@ -34,7 +34,7 @@ fn main() {
 
     let problem3 = Problem3::new(&util::get_problem(3));
 
-    problem3.run_part1();
-    //problem2.run_part2();
+  //  problem3.run_part1();
+    problem3.run_part2();
 
 }

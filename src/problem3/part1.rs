@@ -1,6 +1,7 @@
 use crate::Problem;
 use std::str::FromStr;
 use std::collections::HashSet;
+use std::thread::yield_now;
 
 pub struct Problem3 {
     input: Vec<Vec<Operation>>,
@@ -59,36 +60,44 @@ struct Coord {
 struct Segment(Coord, Coord);
 
 impl Segment {
+    pub fn len(self) -> i32 {
+        return ((self.1.x - self.0.x).powi(2) + (self.1.y - self.0.y).powi(2)).sqrt() as i32
+    }
     pub fn intersect(self, other: Self) -> Option<Coord> {
 
-        let a1 = self.1.y - self.0.y;
-        let b1 = self.0.x - self.1.x;
-        let c1 = a1 * self.0.x + b1 * self.0.y;
-
-        let a2 = other.1.y - other.0.y;
-        let b2 = other.0.x - other.1.x;
-        let c2 = a2 * other.0.x + b2 * other.0.y;
-
-        let delta = a1 * b2 - a2 * b1;
-
-        if delta == 0.0 {
-            return None;
+        // First line is horiz and second it vert
+        if self.0.x == self.1.x && other.0.y == other.1.y {
+            let mut x_points = vec![self.0.x as i32, other.0.x as i32, other.1.x as i32];
+            let mut y_points = vec![self.0.y as i32, self.1.y as i32, other.0.y as i32];
+            x_points.sort(); y_points.sort();
+            if x_points[1] == self.0.x as i32 && y_points[1] == other.0.y as i32 {
+                Some(Coord {
+                    x: x_points[1] as f32,
+                    y: y_points[1] as f32,
+                })
+            } else {
+                None
+            }
         }
-
-        let x = (b2 * c1 - b1 * c2) / delta;
-        let y = (a1 * c2 - a2 * c1) / delta;
-
-        if x == -0.0 || y == -0.0 {
-            return None;
+        // First line is vert and second is horiz
+        else if self.0.y == self.1.y && other.0.x == other.1.x {
+            let mut x_points = vec![other.0.x as i32, self.0.x as i32, self.1.x as i32];
+            let mut y_points = vec![other.0.y as i32, other.1.y as i32, self.0.y as i32];
+            x_points.sort(); y_points.sort();
+            if x_points[1] == other.0.x as i32 && y_points[1] == self.0.y as i32 {
+                Some(Coord {
+                    x: x_points[1] as f32,
+                    y: y_points[1] as f32,
+                })
+            } else {
+                None
+            }
         }
-
-        Some(Coord {
-            x: (b2 * c1 - b1 * c2) / delta,
-            y: (a1 * c2 - a2 * c1) / delta,
-        })
+        else {
+            None
+        }
     }
 }
-
 
 impl Problem3 {
 
@@ -157,10 +166,13 @@ impl Problem for Problem3 {
             for x in lines.last().unwrap() {
 
                 if let Some(z) = a.intersect(*x) {
-                    intersections.push(z);
-                    //println!("{:?}", z);
-                }
+                    if z.x == 0.0 || z.y == 0.0 {
 
+                    } else {
+                        intersections.push(z);
+                    }
+
+                }
             }
         }
 
@@ -177,6 +189,77 @@ impl Problem for Problem3 {
     }
 
     fn run_part2(&self) {
+
+        let mut lines = Vec::new();
+
+        for line in &self.input {
+
+            let mut position = Coord {x: 0.0, y: 0.0};
+            let mut accumulator = Vec::new();
+
+            for operation in line {
+
+                let next = match operation.direction {
+                    Direction::Down => {
+                        Coord { x: position.x, y: position.y - operation.length as f32 }
+                    }
+                    Direction::Up => {
+                        Coord { x: position.x, y: position.y + operation.length as f32 }
+                    }
+                    Direction::Left => {
+                        Coord { x: position.x - operation.length as f32, y: position.y }
+                    }
+                    Direction::Right => {
+                        Coord { x: position.x + operation.length as f32, y: position.y }
+                    }
+                };
+
+                accumulator.push(Segment(position,  next));
+                position = next;
+
+            }
+
+            lines.push(accumulator);
+        }
+
+        let mut intersections = Vec::new();
+
+        let mut a_accu = 0;
+        let mut x_accu = 0;
+
+        for a in lines.first().unwrap() {
+            x_accu = 0;
+            a_accu += a.len();
+            for x in lines.last().unwrap() {
+                x_accu += x.len();
+
+                if let Some(z) = a.intersect(*x) {
+                    if z.x == 0.0 || z.y == 0.0 {
+
+                    } else {
+                        intersections.push(
+                            (
+                                z,
+                                x_accu - Segment(x.1, z).len() +
+                                a_accu - Segment(a.1, z).len()
+                            )
+                        );
+                    }
+
+                }
+            }
+        }
+
+        let mut dist = Vec::new();
+
+        for (i, l) in intersections {
+
+            println!("{:?} ==== {} ==== {}", i, l, (i.x.abs() + i.y.abs()));
+            dist.push((i.x.abs() + i.y.abs()) as i32);
+        }
+
+        dist.sort();
+        println!("{:?}", dist);
     }
 }
 
