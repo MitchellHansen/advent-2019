@@ -4,11 +4,12 @@ extern crate tempfile;
 use crate::problem1::part1::Problem1;
 use crate::problem2::part1::Problem2;
 use crate::problem3::part1::Problem3;
-
+use crate::problem4::part1::Problem4;
 
 mod problem1;
 mod problem2;
 mod problem3;
+mod problem4;
 mod util;
 
 pub trait Problem {
@@ -23,18 +24,21 @@ pub trait Problem {
 fn main() {
 
 //    let problem1 = Problem1::new(&util::get_problem(1));
-//
 //    problem1.run_part1();
 //    problem1.run_part2();
 //
 //    let problem2 = Problem2::new(&util::get_problem(2));
-//
 //    problem2.run_part1();
 //    problem2.run_part2();
+//
+//    let problem3 = Problem3::new(&util::get_problem(3));
+//    problem3.run_part1();
+//    problem3.run_part2();
+//
+    let problem4 = Problem4::new(&util::get_problem(4));
+    problem4.run_part1();
+    problem4.run_part2();
 
-    let problem3 = Problem3::new(&util::get_problem(3));
 
-  //  problem3.run_part1();
-    problem3.run_part2();
 
 }
