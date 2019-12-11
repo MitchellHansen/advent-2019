@@ -7,6 +7,7 @@ use crate::problem3::part1::Problem3;
 use crate::problem4::part1::Problem4;
 use crate::problem5::part1::Problem5;
 use crate::problem6::part1::Problem6;
+use crate::problem7::part1::Problem7;
 
 mod problem1;
 mod problem2;
@@ -14,6 +15,7 @@ mod problem3;
 mod problem4;
 mod problem5;
 mod problem6;
+mod problem7;
 mod util;
 
 pub trait Problem {
@@ -46,8 +48,11 @@ fn main() {
 //    let problem5 = Problem5::new(&util::get_problem(5));
 //    problem5.run_part1();
 //
-    let problem6 = Problem6::new(&util::get_problem(6));
-    //problem6.run_part1();
-    problem6.run_part2();
+//    let problem6 = Problem6::new(&util::get_problem(6));
+//    problem6.run_part1();
+//    problem6.run_part2();
 
+    let problem7 = Problem7::new(&util::get_problem(7));
+    problem7.run_part1();
+    problem7.run_part2();
 }
